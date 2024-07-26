@@ -5,7 +5,6 @@ $pdo = new PDO("sqlite:$dbPath");
 
 $videoList = $pdo->query("SELECT * FROM videos")->fetchAll(PDO::FETCH_ASSOC);
 
-
 ?>
 
 <!DOCTYPE html>
@@ -16,9 +15,9 @@ $videoList = $pdo->query("SELECT * FROM videos")->fetchAll(PDO::FETCH_ASSOC);
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./css/reset.css">
-    <link rel="stylesheet" href="./css/estilos.css">
-    <link rel="stylesheet" href="./css/flexbox.css">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/estilos.css">
+    <link rel="stylesheet" href="css/flexbox.css">
     <title>PHP Play</title>
     <link rel="shortcut icon" href="./img/favicon.ico" type="image/x-icon">
 </head>
@@ -40,7 +39,6 @@ $videoList = $pdo->query("SELECT * FROM videos")->fetchAll(PDO::FETCH_ASSOC);
 
     <ul class="videos__container" alt="videos">
     <?php foreach ($videoList as $video) : ?>
-    <?php if(str_starts_with($video['url'], 'http')) : ?>
         <li class="videos__item">
             <iframe width="100%" height="72%" src="<?=$video['url'];?>"
                 title="YouTube video player" frameborder="0"
@@ -48,14 +46,13 @@ $videoList = $pdo->query("SELECT * FROM videos")->fetchAll(PDO::FETCH_ASSOC);
                 allowfullscreen></iframe>
             <div class="descricao-video">
                 <img src="./img/logo.svg" alt="logo canal">
-                <h3>Creating CLI Apps with PHP | by Marcel Pociot | Laravel Meetup</h3>
+                <h3><?=$video['title'];?></h3>
                 <div class="acoes-video">
-                    <a href="./pages/enviar-video.html">Editar</a>
-                    <a href="./pages/enviar-video.html">Excluir</a>
+                    <a href="./formulario.php?id=<?=$video['id'];?>">Editar</a>
+                    <a href="./remover-video.php?id=<?= $video['id'];?>">Excluir</a>
                 </div>
             </div>
         </li>
-        <?php endif;?>
         <?php endforeach;?>
     </ul>
 </body>

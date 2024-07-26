@@ -3,7 +3,13 @@
 $dbPath = __DIR__ . '/banco.sqlite';
 $pdo =new PDO("sqlite:$dbPath");
 
-$url = filter_input(INPUT_POST, 'url', FILTER_SANITIZE_URL);
+$id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+if($id === false) {
+    header("Location: index.php?sucesso=0");
+    exit();
+}
+
+$url = filter_input(INPUT_POST, 'url', FILTER_VALIDATE_URL);
 if ($url === false) {
     header("Location: index.php?sucesso=0");
     exit();
@@ -15,12 +21,12 @@ if ($titulo === false) {
     exit();
 }
 
-$sql ='INSERT INTO videos (url, title) VALUES (?, ?)';
-
+$sql = 'UPDATE videos SET url =:url, title = :title WHERE id = :id';
 $stmt = $pdo->prepare($sql);
 
-$stmt->bindValue(1, $_POST['url']);
-$stmt->bindValue(2, $_POST['titulo']);
+$stmt->bindValue(':url',$url);
+$stmt->bindValue(':title',$titulo);
+$stmt->bindValue('id',$id, PDO::PARAM_INT);
 
 if($stmt->execute() === false){
     header('location: index.php?sucesso=0');
